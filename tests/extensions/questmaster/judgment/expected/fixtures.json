@@ -1,0 +1,397 @@
+[
+  {
+    "fixture": "01-url-shortener-faithful",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/01-url-shortener-faithful",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-003",
+        "expected_classification": "REFINED"
+      }
+    ],
+    "expected_band_ranges": {
+      "story_fidelity": [
+        "STRONG"
+      ],
+      "scope_discipline": [
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "02-url-shortener-drift",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/02-url-shortener-drift",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-003",
+        "expected_classification": "UNJUSTIFIED_DRIFT"
+      }
+    ],
+    "expected_band_ranges": {
+      "scope_discipline": [
+        "WEAK",
+        "ABSENT"
+      ]
+    }
+  },
+  {
+    "fixture": "03-csv-export-faithful",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/03-csv-export-faithful",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      }
+    ],
+    "expected_band_ranges": {
+      "story_fidelity": [
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "04-csv-export-scope-accepted",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/04-csv-export-scope-accepted",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "ACCEPTED_SCOPE_CHANGE"
+      }
+    ],
+    "expected_band_ranges": {
+      "scope_discipline": [
+        "ADEQUATE",
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "05-two-factor-auth-faithful",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/05-two-factor-auth-faithful",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-003",
+        "expected_classification": "PRESERVED"
+      }
+    ],
+    "expected_band_ranges": {
+      "story_fidelity": [
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "06-two-factor-auth-plan-drift",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/06-two-factor-auth-plan-drift",
+    "has_plan": true,
+    "elements": [
+      {
+        "element": "TOTP field + login-flow check",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "auth-gateway microservice",
+        "expected_classification": "UNJUSTIFIED_DRIFT"
+      }
+    ],
+    "expected_band_ranges": {
+      "proportionality": [
+        "WEAK",
+        "ABSENT"
+      ],
+      "intent_preservation": [
+        "ADEQUATE",
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "07-profile-picture-faithful",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/07-profile-picture-faithful",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      }
+    ],
+    "expected_band_ranges": {
+      "story_fidelity": [
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "08-profile-picture-constraint-dropped",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/08-profile-picture-constraint-dropped",
+    "has_plan": true,
+    "elements": [
+      {
+        "element": "Avatar upload endpoint",
+        "expected_classification": "PRESERVED"
+      }
+    ],
+    "expected_band_ranges": {
+      "constraint_preservation": [
+        "WEAK",
+        "ABSENT"
+      ],
+      "specification_coverage": [
+        "ADEQUATE",
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "09-password-reset-faithful",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/09-password-reset-faithful",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      }
+    ],
+    "expected_band_ranges": {
+      "story_fidelity": [
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "10-password-reset-discovered",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/10-password-reset-discovered",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-003",
+        "expected_classification": "DISCOVERED"
+      }
+    ],
+    "expected_band_ranges": {
+      "scope_discipline": [
+        "ADEQUATE",
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "11-dark-mode-faithful",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/11-dark-mode-faithful",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      }
+    ],
+    "expected_band_ranges": {
+      "story_fidelity": [
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "12-dark-mode-drift",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/12-dark-mode-drift",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "UNJUSTIFIED_DRIFT"
+      }
+    ],
+    "expected_band_ranges": {
+      "scope_discipline": [
+        "WEAK",
+        "ABSENT"
+      ]
+    }
+  },
+  {
+    "fixture": "13-bulk-user-import-faithful-plan",
+    "dir": "tests/extensions/questmaster/judgment/fixtures/13-bulk-user-import-faithful-plan",
+    "has_plan": true,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "CSV upload + per-row account creation",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "Per-row result reporting",
+        "expected_classification": "PRESERVED"
+      }
+    ],
+    "expected_band_ranges": {
+      "story_fidelity": [
+        "STRONG"
+      ],
+      "intent_preservation": [
+        "STRONG"
+      ],
+      "proportionality": [
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "14-faithful-quest-example",
+    "dir": "extensions/questmaster/examples/faithful-quest",
+    "has_plan": false,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-003",
+        "expected_classification": "REFINED"
+      },
+      {
+        "element": "REQ-004",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-005",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-006",
+        "expected_classification": "CLARIFIED"
+      },
+      {
+        "element": "REQ-007",
+        "expected_classification": "PRESERVED"
+      }
+    ],
+    "expected_band_ranges": {
+      "story_fidelity": [
+        "STRONG"
+      ],
+      "scope_discipline": [
+        "STRONG"
+      ]
+    }
+  },
+  {
+    "fixture": "15-drifting-quest-example",
+    "dir": "extensions/questmaster/examples/drifting-quest",
+    "has_plan": true,
+    "elements": [
+      {
+        "element": "REQ-001",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-002",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-003",
+        "expected_classification": "PRESERVED"
+      },
+      {
+        "element": "REQ-004",
+        "expected_classification": "CLARIFIED"
+      },
+      {
+        "element": "REQ-010",
+        "expected_classification": "UNJUSTIFIED_DRIFT"
+      },
+      {
+        "element": "REQ-011",
+        "expected_classification": "ACCEPTED_SCOPE_CHANGE"
+      },
+      {
+        "element": "preference-sync-service",
+        "expected_classification": "UNJUSTIFIED_DRIFT"
+      }
+    ],
+    "expected_band_ranges": {
+      "scope_discipline": [
+        "WEAK",
+        "ABSENT"
+      ],
+      "constraint_preservation": [
+        "WEAK",
+        "ABSENT"
+      ],
+      "proportionality": [
+        "WEAK",
+        "ABSENT"
+      ]
+    }
+  }
+]

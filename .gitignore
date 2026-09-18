@@ -1,0 +1,9 @@
+# Spec Kit local installation/runtime state — regenerate with `specify init`
+# and `specify extension add --dev ./extensions/questmaster`. Not source.
+.claude/
+.specify/*
+!.specify/memory/
+
+# Python bytecode cache
+__pycache__/
+*.pyc

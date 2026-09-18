@@ -1,0 +1,96 @@
+# Questmaster's own extension manifest — the actual artifact `specify extension add questmaster`
+# (or `specify extension add --dev ./questmaster` during development) installs from.
+#
+# Corrected 2026-09-13b after directly inspecting github/spec-kit's real extension mechanism
+# (src/specify_cli/extensions/__init__.py, extensions/EXTENSION-DEVELOPMENT-GUIDE.md,
+# extensions/git/extension.yml as a working precedent). This supersedes the original design's
+# ad hoc `.specify/extensions.yml` + `.specify/questmaster/config.yml` layout, which does not
+# match how the real CLI registers commands, executes hooks, or resolves config. See
+# research.md §1/§4/§12 for the evidence trail and what specifically was wrong before.
+
+schema_version: "1.0"
+
+extension:
+  id: "questmaster"
+  name: "Questmaster"
+  version: "1.0.0"
+  description: "A quest layer for Spec Kit: Socratic problem-framing before specification, banded Integrity scoring, developer-judgment tracking, and Drift Classification across Story/Spec/Plan"
+  author: "Questmaster contributors"
+  repository: "https://github.com/your-org/spec-kit-extension-questmaster"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=1.0.0"
+  # No external tools — deliberately (Constitution: Scope & Technology Constraints; FR-028)
+
+# Commands MUST follow speckit.<ext-id>.<cmd> (enforced by the extension safety check —
+# ARCHITECTURE.md — and by HookExecutor._skill_name_from_command, which only produces a
+# correct agent invocation string for speckit.-prefixed command ids). For Claude, each
+# renders to .claude/skills/speckit-questmaster-<cmd>/SKILL.md, invoked as
+# /speckit-questmaster-<cmd> (CommandRegistrar._compute_output_name).
+provides:
+  commands:
+    - name: "speckit.questmaster.story"
+      file: "commands/speckit.questmaster.story.md"
+      description: "Storyteller: Socratic interview + Dragon Pass, produces story.md with a banded Story Integrity Assessment and readiness classification"
+      # Free-form aliases are permitted (no pattern enforcement — see e.g. "speckit.verify"
+      # short aliases used by existing extensions) but still render through the same
+      # speckit-<name> path, so the friendliest achievable short form is /speckit-quest-story,
+      # not the original brief's bare /quest-story.
+      aliases: ["speckit.quest-story"]
+
+    - name: "speckit.questmaster.check-spec"
+      file: "commands/speckit.questmaster.check-spec.md"
+      description: "Specification Integrity assessment: spec.md against story.md, independently assessed, Drift Classification, decision-first report"
+      aliases: ["speckit.quest-check-spec"]
+
+    - name: "speckit.questmaster.check-plan"
+      file: "commands/speckit.questmaster.check-plan.md"
+      description: "Comprehension Checkpoint + Plan Integrity assessment: plan.md against story.md and spec.md, independently assessed"
+      aliases: ["speckit.quest-check-plan"]
+
+  # Materializes at .specify/extensions/questmaster/questmaster-config.yml on install
+  # (ConfigManager's project-config layer). Layered, for free, with
+  # .specify/extensions/questmaster/local-config.yml (gitignored per-developer override) and
+  # SPECKIT_QUESTMASTER_<KEY> environment variables — see data-model.md's Scoring Rubric
+  # Configuration section for how Questmaster's own rubric-sum/band validation sits on top of
+  # this generic layering.
+  config:
+    - name: "questmaster-config.yml"
+      template: "config/questmaster-config.template.yml"
+      description: "Story/Specification/Plan rubrics, band anchors, readiness threshold, critical-condition list (FR-024)"
+      required: true
+
+  # Extension-provided templates sit above core, below any preset override (ARCHITECTURE.md's
+  # priority table) — resolved by name, not requiring a `replaces:` field the way a preset's
+  # override of a *specific* core template does.
+  templates:
+    - name: "story-template"
+      file: "templates/story-template.md"
+      description: "9 core + 4 extended + 4 recorded Quest Story Structure skeleton (FR-003)"
+
+    - name: "spec-template"
+      file: "templates/spec-template-pending-story-addendum.md"
+      description: "Prepended addendum: if .specify/extensions/questmaster/pending-story.md exists, use it as primary input for the sections below (FR-029)"
+      strategy: "prepend"
+
+# Fires automatically (no `condition:` — see research.md §4 for why a conditioned hook is
+# guaranteed to never fire from an interactive agent session in this Spec Kit version).
+# `specify extension add questmaster` registers these into the project's
+# .specify/extensions.yml; a project never hand-authors that file for Questmaster's sake.
+hooks:
+  after_specify:
+    command: "speckit.questmaster.check-spec"
+    optional: false
+    description: "Relocate any pending story into the new feature directory, then assess Specification Integrity"
+
+  after_plan:
+    command: "speckit.questmaster.check-plan"
+    optional: false
+    description: "Run the Comprehension Checkpoint, then assess Plan Integrity"
+
+tags:
+  - "quality"
+  - "specification"
+  - "traceability"
+  - "process"

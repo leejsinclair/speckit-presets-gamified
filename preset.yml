@@ -1,0 +1,43 @@
+# Companion preset to the Questmaster extension (extensions/questmaster/ in this same repo),
+# created 2026-09-13e after actually running `specify extension add --dev ./extensions/questmaster`
+# proved that an extension-provided template can only ever use 'replace' semantics —
+# 'strategy: prepend' is rejected outright by ExtensionManager's validation (research.md §14).
+# Presets are the only manifest kind whose provides.templates entries support prepend/append/wrap
+# composition (presets/ARCHITECTURE.md's strategy table), so the one piece of Questmaster that
+# genuinely needs to PREPEND onto the core spec-template — rather than replace or add a net-new
+# template — has to ship here instead of in the extension.
+#
+# This preset provides NOTHING else: no commands, no hooks, no config. Installing it without the
+# questmaster extension does nothing useful (the addendum only ever renders content when
+# .specify/extensions/questmaster/pending-story.md exists, which only the extension's
+# /speckit-questmaster-story command ever writes) — it exists purely to carry this one addendum
+# through the one mechanism capable of expressing it, per FR-042 (no existing Spec Kit file is
+# ever edited to achieve this). See README.md for how the two pieces fit together.
+
+schema_version: "1.0"
+
+preset:
+  id: "questmaster-pending-story"
+  name: "Questmaster: pending-story spec-template addendum"
+  version: "1.0.0"
+  description: "Prepends a pending-story check onto the core spec-template, for the Questmaster extension's FR-029 handoff (companion to extensions/questmaster)"
+  author: "Lee Sinclair"
+  repository: "https://github.com/leejsinclair/speckit-presets-gamified"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=1.0.0"
+
+provides:
+  templates:
+    - type: "template"
+      name: "spec-template"
+      file: "templates/spec-template.md"
+      description: "Prepended addendum: if .specify/extensions/questmaster/pending-story.md exists, use it as primary input for the sections below (FR-029)"
+      strategy: "prepend"
+      replaces: "spec-template"
+
+tags:
+  - "quality"
+  - "specification"
+  - "companion-preset"

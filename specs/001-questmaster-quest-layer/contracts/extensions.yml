@@ -1,0 +1,34 @@
+# ILLUSTRATIVE ONLY — this is what `specify extension add questmaster` writes into a project's
+# .specify/extensions.yml (the runtime hook registry `HookExecutor` reads from), derived from
+# `hooks:` in contracts/extension.yml. Questmaster does not ship this file directly and a
+# project never hand-authors it for Questmaster's sake — see contracts/extension.yml, which is
+# the actual source artifact.
+#
+# Corrected 2026-09-13b: the original design had Questmaster ship this file directly at the
+# project root with hand-picked internal ids (`quest.check-spec`, `quest.check-plan`). Those
+# ids are not `speckit.`-prefixed, so HookExecutor._skill_name_from_command (the real,
+# installed mechanism) produces no agent invocation string for them at all and falls back to a
+# literal, non-invocable `/quest.check-spec`. Registering through the extension manifest, with
+# `speckit.questmaster.*` command ids, is what makes hook firing actually resolve to a real
+# skill (research.md §1/§4).
+
+installed:
+  - questmaster
+
+settings:
+  auto_execute_hooks: true
+
+hooks:
+  after_specify:
+    - extension: questmaster
+      command: speckit.questmaster.check-spec
+      description: "Relocate any pending story into this feature directory, then assess Specification Integrity (spec.md against story.md) independently, with Drift Classification"
+      optional: false
+      enabled: true
+
+  after_plan:
+    - extension: questmaster
+      command: speckit.questmaster.check-plan
+      description: "Run the Comprehension Checkpoint, then assess Plan Integrity (plan.md against story.md and spec.md) independently, with Drift Classification"
+      optional: false
+      enabled: true

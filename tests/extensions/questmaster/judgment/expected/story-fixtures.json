@@ -1,0 +1,200 @@
+[
+  {
+    "fixture": "01-ready-strong.md",
+    "expected_bands": {
+      "problem_definition": "STRONG",
+      "actors_and_current_state": "STRONG",
+      "use_cases": "STRONG",
+      "desired_outcomes": "STRONG",
+      "scope_and_boundaries": "STRONG",
+      "success_criteria": "STRONG",
+      "assumptions_and_unknowns": "ADEQUATE",
+      "constraints_and_context": "ADEQUATE",
+      "solution_neutrality": "STRONG",
+      "developer_judgment": "ADEQUATE"
+    },
+    "expected_overall_score": 93,
+    "expected_unmet_critical_conditions": [],
+    "expected_status": "READY"
+  },
+  {
+    "fixture": "02-needs-clarification.md",
+    "expected_bands": {
+      "problem_definition": "ADEQUATE",
+      "actors_and_current_state": "WEAK",
+      "use_cases": "WEAK",
+      "desired_outcomes": "ADEQUATE",
+      "scope_and_boundaries": "WEAK",
+      "success_criteria": "WEAK",
+      "assumptions_and_unknowns": "WEAK",
+      "constraints_and_context": "ABSENT",
+      "solution_neutrality": "STRONG",
+      "developer_judgment": "ADEQUATE"
+    },
+    "expected_overall_score": 48,
+    "expected_unmet_critical_conditions": [],
+    "expected_status": "NEEDS_CLARIFICATION"
+  },
+  {
+    "fixture": "03-core-problem-unclear.md",
+    "expected_bands": {
+      "problem_definition": "ABSENT",
+      "actors_and_current_state": "WEAK",
+      "use_cases": "WEAK",
+      "desired_outcomes": "WEAK",
+      "scope_and_boundaries": "WEAK",
+      "success_criteria": "WEAK",
+      "assumptions_and_unknowns": "ABSENT",
+      "constraints_and_context": "ABSENT",
+      "solution_neutrality": "ABSENT",
+      "developer_judgment": "ADEQUATE"
+    },
+    "expected_overall_score": 26,
+    "expected_unmet_critical_conditions": [
+      "core_problem_unclear",
+      "success_not_evaluable"
+    ],
+    "expected_status": "NOT_READY"
+  },
+  {
+    "fixture": "04-primary-actor-unknown.md",
+    "expected_bands": {
+      "problem_definition": "STRONG",
+      "actors_and_current_state": "WEAK",
+      "use_cases": "STRONG",
+      "desired_outcomes": "STRONG",
+      "scope_and_boundaries": "STRONG",
+      "success_criteria": "STRONG",
+      "assumptions_and_unknowns": "ADEQUATE",
+      "constraints_and_context": "ADEQUATE",
+      "solution_neutrality": "STRONG",
+      "developer_judgment": "STRONG"
+    },
+    "expected_overall_score": 89,
+    "expected_unmet_critical_conditions": [
+      "primary_actor_unknown"
+    ],
+    "expected_status": "NOT_READY"
+  },
+  {
+    "fixture": "05-desired-outcome-absent.md",
+    "expected_bands": {
+      "problem_definition": "STRONG",
+      "actors_and_current_state": "ADEQUATE",
+      "use_cases": "ADEQUATE",
+      "desired_outcomes": "ABSENT",
+      "scope_and_boundaries": "ADEQUATE",
+      "success_criteria": "WEAK",
+      "assumptions_and_unknowns": "ADEQUATE",
+      "constraints_and_context": "WEAK",
+      "solution_neutrality": "WEAK",
+      "developer_judgment": "ADEQUATE"
+    },
+    "expected_overall_score": 56,
+    "expected_unmet_critical_conditions": [
+      "desired_outcome_absent",
+      "success_not_evaluable"
+    ],
+    "expected_status": "NOT_READY"
+  },
+  {
+    "fixture": "06-critical-use-cases-missing.md",
+    "expected_bands": {
+      "problem_definition": "STRONG",
+      "actors_and_current_state": "ADEQUATE",
+      "use_cases": "ABSENT",
+      "desired_outcomes": "ADEQUATE",
+      "scope_and_boundaries": "ADEQUATE",
+      "success_criteria": "WEAK",
+      "assumptions_and_unknowns": "ADEQUATE",
+      "constraints_and_context": "WEAK",
+      "solution_neutrality": "STRONG",
+      "developer_judgment": "ADEQUATE"
+    },
+    "expected_overall_score": 59,
+    "expected_unmet_critical_conditions": [
+      "critical_use_cases_missing"
+    ],
+    "expected_status": "NOT_READY"
+  },
+  {
+    "fixture": "07-scope-unbounded.md",
+    "expected_bands": {
+      "problem_definition": "STRONG",
+      "actors_and_current_state": "ADEQUATE",
+      "use_cases": "ADEQUATE",
+      "desired_outcomes": "ADEQUATE",
+      "scope_and_boundaries": "ABSENT",
+      "success_criteria": "WEAK",
+      "assumptions_and_unknowns": "ADEQUATE",
+      "constraints_and_context": "WEAK",
+      "solution_neutrality": "STRONG",
+      "developer_judgment": "ADEQUATE"
+    },
+    "expected_overall_score": 62,
+    "expected_unmet_critical_conditions": [
+      "scope_unbounded"
+    ],
+    "expected_status": "NOT_READY"
+  },
+  {
+    "fixture": "08-critical-assumptions-unresolved.md",
+    "expected_bands": {
+      "problem_definition": "STRONG",
+      "actors_and_current_state": "ADEQUATE",
+      "use_cases": "ADEQUATE",
+      "desired_outcomes": "ADEQUATE",
+      "scope_and_boundaries": "ADEQUATE",
+      "success_criteria": "WEAK",
+      "assumptions_and_unknowns": "WEAK",
+      "constraints_and_context": "WEAK",
+      "solution_neutrality": "STRONG",
+      "developer_judgment": "ADEQUATE"
+    },
+    "expected_overall_score": 68,
+    "expected_unmet_critical_conditions": [
+      "critical_assumptions_unresolved"
+    ],
+    "expected_status": "NOT_READY"
+  },
+  {
+    "fixture": "09-success-not-evaluable.md",
+    "expected_bands": {
+      "problem_definition": "STRONG",
+      "actors_and_current_state": "ADEQUATE",
+      "use_cases": "ADEQUATE",
+      "desired_outcomes": "ADEQUATE",
+      "scope_and_boundaries": "ADEQUATE",
+      "success_criteria": "ABSENT",
+      "assumptions_and_unknowns": "ADEQUATE",
+      "constraints_and_context": "WEAK",
+      "solution_neutrality": "STRONG",
+      "developer_judgment": "ADEQUATE"
+    },
+    "expected_overall_score": 66,
+    "expected_unmet_critical_conditions": [
+      "success_not_evaluable"
+    ],
+    "expected_status": "NOT_READY"
+  },
+  {
+    "fixture": "10-empty-judgment-ledger.md",
+    "expected_bands": {
+      "problem_definition": "STRONG",
+      "actors_and_current_state": "STRONG",
+      "use_cases": "STRONG",
+      "desired_outcomes": "STRONG",
+      "scope_and_boundaries": "STRONG",
+      "success_criteria": "STRONG",
+      "assumptions_and_unknowns": "ADEQUATE",
+      "constraints_and_context": "ADEQUATE",
+      "solution_neutrality": "STRONG",
+      "developer_judgment": "ABSENT"
+    },
+    "expected_overall_score": 86,
+    "expected_unmet_critical_conditions": [
+      "no_developer_judgment_recorded"
+    ],
+    "expected_status": "NOT_READY"
+  }
+]

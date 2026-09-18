@@ -1,0 +1,254 @@
+# Questmaster scoring rubric configuration — project-editable (FR-024).
+#
+# This file is the CONTENT of contracts/extension.yml's provides.config template
+# (config/questmaster-config.template.yml). On install it materializes at
+# .specify/extensions/questmaster/questmaster-config.yml — the real ConfigManager's
+# project-config layer (extensions/__init__.py:4484) — not the project-root
+# .specify/questmaster/config.yml the original design assumed (corrected 2026-09-13b; see
+# research.md §12). It sits under three more layers a project gets for free and Questmaster
+# does not need to reimplement: extension.yml `defaults` (none declared here beyond this
+# file), a gitignored per-developer override at
+# .specify/extensions/questmaster/local-config.yml, and SPECKIT_QUESTMASTER_<KEY> environment
+# variables. Read by /speckit-questmaster-story, /speckit-questmaster-check-spec, and
+# /speckit-questmaster-check-plan. Domain-specific validation Questmaster still owns on top of
+# that generic layering: if a rubric's weights don't sum to 100, or band_multipliers/anchors
+# are malformed, the reading command falls back to these documented defaults for the affected
+# rubric only and emits a one-line warning (see spec.md Edge Cases, data-model.md Validation
+# rule) — ConfigManager's own YAML merge has no opinion on what a valid rubric looks like.
+#
+# Revised 2026-09-13a: scores are computed from anchored bands, never assigned as free
+# integers (FR-036) — this is what makes re-running an assessment on an unchanged artifact
+# reproducible. Changing band_multipliers changes every score in the project; changing a
+# dimension's `anchors` changes only what that dimension means.
+
+band_multipliers:      # FR-036 — the only numbers a band ever resolves to
+  ABSENT: 0.00
+  WEAK: 0.33
+  ADEQUATE: 0.67
+  STRONG: 1.00
+
+story_rubric:
+  # FR-013/FR-014: below this score (and with no critical_conditions unmet), status is
+  # NEEDS_CLARIFICATION rather than READY; the developer must explicitly revise or accept
+  # risk, and accepting requires a justification in their own words (FR-014).
+  readiness_threshold: 70
+
+  # FR-012: ANY unmet condition here forces NOT_READY regardless of overall_score. This list
+  # is itself project-editable. no_developer_judgment_recorded is new in this revision: it
+  # is unmet whenever the story's Judgment Ledger has zero entries, and makes READY
+  # unreachable for a story the developer did not actually participate in.
+  critical_conditions:
+    - core_problem_unclear
+    - primary_actor_unknown
+    - desired_outcome_absent
+    - critical_use_cases_missing
+    - scope_unbounded
+    - critical_assumptions_unresolved
+    - success_not_evaluable
+    - no_developer_judgment_recorded
+
+  # FR-010: ten dimensions, weights sum to 100. Each dimension is banded ABSENT/WEAK/
+  # ADEQUATE/STRONG against the anchors below, then converted to a score via
+  # band_multipliers (score = round(weight * multiplier)). See data-model.md's Quest Story
+  # Structure table for which section(s) each dimension evaluates.
+  dimensions:
+    - name: problem_definition
+      weight: 15
+      anchors:
+        STRONG: "Problem stated with no implementation noun; would remain true under any solution; independently checkable against Current Behaviour"
+        ADEQUATE: "Problem is solution-neutral and specific, but one supporting detail (evidence, scope of who's affected) is missing"
+        WEAK: "Problem is vague, stated as a restated need, or partially describes a solution"
+        ABSENT: "No problem statement, or the 'problem' is only a solution ('we need X')"
+    - name: actors_and_current_state
+      weight: 10
+      anchors:
+        STRONG: "Every actor referenced later is named and distinguished; current behavior described step-by-step"
+        ADEQUATE: "Primary actor named and current behavior described; a secondary actor or edge of current behavior is thin"
+        WEAK: "Actors named as an undifferentiated group ('users'); current behavior asserted, not described"
+        ABSENT: "No actor named, or current behavior not addressed"
+    - name: use_cases
+      weight: 15
+      anchors:
+        STRONG: "2-4 meaningful cases, each with actor/goal/trigger/result, at least one with an alternate or failure path"
+        ADEQUATE: "2+ meaningful cases with actor/goal/trigger/result, no failure path where one would matter"
+        WEAK: "One trivial case, or cases with no trigger/result detail"
+        ABSENT: "No use cases, or a list of implementation steps mislabelled as use cases"
+    - name: desired_outcomes
+      weight: 15
+      anchors:
+        STRONG: "Stated as an observable resulting state, directly traceable to the problem statement"
+        ADEQUATE: "Outcome stated as a resulting state but only loosely tied back to the stated problem"
+        WEAK: "Outcome phrased as an implementation action ('implement X')"
+        ABSENT: "No desired outcome distinguishable from the proposed solution"
+    - name: scope_and_boundaries
+      weight: 10
+      anchors:
+        STRONG: "In-scope, out-of-scope, and adjacent concerns are three distinct, specific lists"
+        ADEQUATE: "In-scope and out-of-scope both present and specific; adjacent concerns thin or absent"
+        WEAK: "Only one list present, or out-of-scope restated as the negative of in-scope"
+        ABSENT: "No scope boundary stated; scope is effectively unbounded"
+    - name: success_criteria
+      weight: 10
+      anchors:
+        STRONG: "Every criterion is an observable, checkable outcome independent of implementation"
+        ADEQUATE: "Most criteria are observable outcomes; one is implementation-flavored or unmeasurable"
+        WEAK: "Criteria present but not checkable without seeing the implementation"
+        ABSENT: "No success criteria, or success cannot be evaluated from what's stated"
+    - name: assumptions_and_unknowns
+      weight: 5
+      anchors:
+        STRONG: "Assumptions and unknowns are separately listed, each phrased as a belief or open question, each material to a decision"
+        ADEQUATE: "Both lists present but one contains an item that isn't actually load-bearing"
+        WEAK: "Assumptions and unknowns collapsed into one list, or an assumption stated as fact"
+        ABSENT: "Neither addressed"
+    - name: constraints_and_context
+      weight: 5
+      anchors:
+        STRONG: "Constraints and business rules are specific, asserted (not inferred), and distinguished from each other; background situates the problem for an outsider"
+        ADEQUATE: "Constraints present and specific; background thin or a constraint reads as inferred rather than asserted"
+        WEAK: "Constraints vague or confused with assumptions; no background given"
+        ABSENT: "Not addressed — acceptable on a Short Quest only when explicitly marked N/A with a reason"
+    - name: solution_neutrality
+      weight: 5
+      anchors:
+        STRONG: "A supplied proposal is fully separated into requirement/implementation/assumption/unnecessary-constraint, or none was supplied and the story is solution-neutral throughout"
+        ADEQUATE: "Proposal separated but one bucket is thin or debatable"
+        WEAK: "Proposal recorded but not analyzed, or the problem statement still leans on the proposed solution's language"
+        ABSENT: "Proposal silently adopted as the requirement, or the developer's resistance to separating them was not surfaced (see spec.md Edge Cases)"
+    - name: developer_judgment
+      weight: 10
+      # Banded from the Judgment Ledger ALONE (FR-035) — never from the quality of
+      # AI-authored story content. This is the dimension that makes engagement, not
+      # document completeness, the thing that scores.
+      anchors:
+        STRONG: "Multiple ledger entries where the developer challenged, cut, or corrected AI-authored content, or asserted a fact/constraint the AI could not have known, or engaged substantively with the Dragon Pass"
+        ADEQUATE: "At least one substantive ledger entry beyond a Dragon dismissal"
+        WEAK: "Only Dragon Pass dismissals recorded, with no other developer-originated content"
+        ABSENT: "Judgment Ledger is empty — also triggers the no_developer_judgment_recorded critical condition (FR-012)"
+  # sum: 100
+
+specification_integrity_rubric:
+  # FR-015: spec.md assessed against story.md, independently of the authoring context
+  # (FR-037). No readiness threshold of its own — findings are advisory only (FR-022).
+  dimensions:
+    - name: story_fidelity
+      weight: 20
+      anchors:
+        STRONG: "Every story outcome and problem element is traceable in spec.md, restated without solution-language drift"
+        ADEQUATE: "Most story elements traceable; one outcome or actor is underrepresented"
+        WEAK: "Spec.md substantially reframes the problem relative to the story"
+        ABSENT: "Spec.md cannot be reasonably traced back to the story's problem/outcome at all"
+    - name: requirement_completeness
+      weight: 15
+      anchors:
+        STRONG: "Every use case and desired outcome in the story is covered by at least one requirement"
+        ADEQUATE: "Most are covered; one use case has no corresponding requirement"
+        WEAK: "Several story elements have no corresponding requirement"
+        ABSENT: "Requirements do not cover the story's core use cases or outcomes"
+    - name: requirement_testability
+      weight: 15
+      anchors:
+        STRONG: "Every requirement is clear, unambiguous, and has a stated or inferable acceptance test"
+        ADEQUATE: "Most requirements are testable; a few are ambiguous but not contradictory"
+        WEAK: "Several requirements cannot be verified as written"
+        ABSENT: "Requirements are pervasively vague or untestable"
+    - name: scope_discipline
+      weight: 20
+      # Higher = fewer/no UNJUSTIFIED_DRIFT scope findings.
+      anchors:
+        STRONG: "No requirement or scope item lacks a traceable justification in story.md or a recorded Decision"
+        ADEQUATE: "One or two requirements are DISCOVERED with reasonable in-spec justification"
+        WEAK: "One or more requirements are UNJUSTIFIED_DRIFT"
+        ABSENT: "Scope has expanded substantially beyond the story with no justification or acceptance anywhere"
+    - name: traceability
+      weight: 10
+      anchors:
+        STRONG: "Requirements are identifiable (REQ-### or equivalent) and each maps cleanly to a story element"
+        ADEQUATE: "Traceable by content even without formal IDs"
+        WEAK: "Tracing requires guessing at intent"
+        ABSENT: "No reasonable mapping can be constructed"
+    - name: handling_of_ambiguity
+      weight: 10
+      anchors:
+        STRONG: "Every assumption and unknown carried from the story is explicitly addressed, resolved, or consciously re-stated as still open"
+        ADEQUATE: "Most are addressed; one is silently dropped"
+        WEAK: "Several story assumptions/unknowns are silently dropped"
+        ABSENT: "Ambiguity from the story is ignored throughout"
+    - name: internal_consistency
+      weight: 10
+      anchors:
+        STRONG: "No contradiction between requirements, or between a requirement and a stated non-goal"
+        ADEQUATE: "One minor tension, not a contradiction"
+        WEAK: "A requirement contradicts a non-goal or another requirement"
+        ABSENT: "Spec.md is internally contradictory in a way that blocks implementation"
+  # sum: 100
+
+plan_integrity_rubric:
+  # FR-016: plan.md assessed against story.md AND spec.md, independently of the authoring
+  # context (FR-037). intent_preservation and constraint_preservation are scored separately
+  # from technical/architectural quality, per FR-016.
+  dimensions:
+    - name: intent_preservation
+      weight: 20
+      anchors:
+        STRONG: "The plan's approach clearly serves the story's desired outcome; a reader could explain why this plan solves that problem"
+        ADEQUATE: "Intent mostly preserved; one technical choice serves the spec but not obviously the story"
+        WEAK: "The plan is technically coherent but the connection to the original outcome requires inference"
+        ABSENT: "The plan could satisfy the spec while abandoning the story's outcome entirely"
+    - name: specification_coverage
+      weight: 15
+      anchors:
+        STRONG: "Every spec.md requirement, including its technical constraints, is addressed by the plan"
+        ADEQUATE: "Most requirements addressed; one is deferred without a stated reason"
+        WEAK: "Several requirements have no corresponding plan element"
+        ABSENT: "The plan does not address the specification's core requirements"
+    - name: constraint_preservation
+      weight: 15
+      # Distinct from specification_coverage: catches a story-level constraint dropped
+      # during technical design even when spec.md itself carried it forward.
+      anchors:
+        STRONG: "Every constraint stated in story.md is visibly honored in the plan's design"
+        ADEQUATE: "Most story constraints honored; one is not explicitly addressed"
+        WEAK: "A story-level constraint is dropped even though spec.md carried it forward"
+        ABSENT: "Story constraints are systematically absent from the plan"
+    - name: proportionality
+      weight: 15
+      # Covers architectural appropriateness, complexity, and unnecessary scope together —
+      # complexity traceable to a stated requirement/constraint/risk is never penalized here
+      # (FR-021); this dimension penalizes complexity that ISN'T traceable.
+      anchors:
+        STRONG: "Every non-trivial component, abstraction, or service is traceable to a stated requirement, constraint, or risk"
+        ADEQUATE: "One element's justification is thin but plausible"
+        WEAK: "One or more components are not traceable to any requirement/constraint/risk"
+        ABSENT: "The plan introduces substantial untraceable complexity (new services, speculative abstractions)"
+    - name: legibility
+      weight: 15
+      # NEW dimension: can a developer who did not author the plan actually follow it,
+      # independent of whether it is technically correct.
+      anchors:
+        STRONG: "A developer who did not write this plan could follow it: decisions are explained, terms are defined, order of work is stated"
+        ADEQUATE: "Mostly followable; one key decision is unexplained"
+        WEAK: "Understanding the plan requires already knowing what the author intended"
+        ABSENT: "The plan is a sequence of assertions with no stated rationale or order of work"
+    - name: risk_management
+      weight: 10
+      anchors:
+        STRONG: "Named risks (including any the Dragon Pass or Comprehension Checkpoint surfaced) have a stated mitigation or explicit acceptance"
+        ADEQUATE: "Major risks addressed; a minor one is unaddressed"
+        WEAK: "Risks are named but not mitigated or accepted"
+        ABSENT: "No risk consideration beyond the happy path"
+    - name: test_strategy
+      weight: 5
+      anchors:
+        STRONG: "Test approach matches the spec's testability requirements and covers the story's failure paths"
+        ADEQUATE: "Test approach covers the happy path and major risks; a failure path is untested"
+        WEAK: "Test approach is generic and doesn't map to this feature's requirements"
+        ABSENT: "No test strategy stated"
+    - name: traceability
+      weight: 5
+      anchors:
+        STRONG: "Major technical decisions cite the story/spec element that justifies them"
+        ADEQUATE: "Traceable by content even without explicit citation"
+        WEAK: "Tracing requires guessing"
+        ABSENT: "No reasonable mapping can be constructed"
+  # sum: 100
