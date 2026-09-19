@@ -4,6 +4,25 @@ A [Spec Kit](https://github.com/github/spec-kit) preset, **`questmaster-pending-
 with its companion extension, **Questmaster** — a quality and reasoning layer for AI-assisted
 software development.
 
+## How it fits into Spec Kit
+
+Spec Kit's own lifecycle is `/speckit-specify` → `/speckit-plan` → `/speckit-tasks` →
+`/speckit-implement`, each producing an artifact the next stage consumes. Questmaster slots into
+that lifecycle without changing any Spec Kit command itself:
+
+| Stage | Runs | What happens |
+|---|---|---|
+| *(before any spec exists)* | You, manually | `/speckit-questmaster-story` — a Socratic interview + Dragon Pass produces `story.md`, capturing the problem before any solution |
+| `/speckit-specify` | Spec Kit | If a story is pending, the preset's addendum makes `/speckit-specify` draft `spec.md` from it as primary input instead of a blank template |
+| *(immediately after)* | Automatic (`after_specify` hook) | `/speckit-questmaster-check-spec` relocates the story into the feature directory, then assesses `spec.md` against it — banded Integrity score, Drift Classification, Decision Worklist |
+| `/speckit-plan` | Spec Kit | Unmodified — Questmaster doesn't touch plan generation itself |
+| *(immediately after)* | Automatic (`after_plan` hook) | `/speckit-questmaster-check-plan` runs the Comprehension Checkpoint (three questions the plan doesn't answer), then assesses `plan.md` against `story.md` + `spec.md` |
+| `/speckit-tasks`, `/speckit-implement` | Spec Kit | Unmodified — Questmaster has no stage here in this release |
+
+Every Questmaster step is advisory: nothing it produces blocks, edits, or is required by Spec Kit's
+own commands. A Spec Kit project without Questmaster installed behaves identically at every one of
+these stages.
+
 ## The preset
 
 `preset.yml` (at the root of this repo) provides `questmaster-pending-story`: it prepends a
@@ -65,6 +84,42 @@ This registers three commands (`/speckit-questmaster-story`, `/speckit-questmast
 `/speckit-questmaster-check-plan`), materializes `questmaster-config.yml` for rubric tuning, and
 wires `after_specify` / `after_plan` hooks so integrity checks run automatically as part of the
 normal Spec Kit flow. Installing both the preset and the extension together is the intended setup.
+
+## Usage
+
+A typical quest, end to end:
+
+```bash
+# 1. Install both (once per project)
+specify preset add --from https://github.com/leejsinclair/speckit-presets-gamified/archive/refs/tags/v1.0.0.zip
+specify extension add --dev ./extensions/questmaster
+
+# 2. Frame the problem before writing any spec
+/speckit-questmaster-story
+# → Socratic interview, then a Dragon Pass (2-5 challenges depending on quest size)
+# → produces story.md with a banded Story Integrity Assessment + readiness classification
+
+# 3. Hand off to Spec Kit as normal — Questmaster's hooks do the rest automatically
+/speckit-specify
+# → the pending story becomes primary input to spec.md, via the preset's prepend addendum
+# → after_specify auto-runs /speckit-questmaster-check-spec: relocates story.md into the
+#   feature directory and reports Specification Integrity + drift from the story
+
+/speckit-plan
+# → after_plan auto-runs /speckit-questmaster-check-plan: asks the three Comprehension
+#   Checkpoint questions, then reports Plan Integrity + drift from spec and story
+
+/speckit-tasks
+/speckit-implement
+```
+
+Any of the three commands can also be run manually at any time — `/speckit-questmaster-check-spec`
+or `/speckit-questmaster-check-plan` to re-check an artifact you've since edited, or their short
+aliases (`/speckit-quest-story`, `/speckit-quest-check-spec`, `/speckit-quest-check-plan`). Every
+report leads with a Decision Worklist, so you know what to act on first rather than just a score.
+
+Skipping step 2 changes nothing else: with no pending story, the preset's addendum contributes
+nothing, and `/speckit-specify` behaves exactly as it would with Questmaster not installed.
 
 ## Documentation
 
